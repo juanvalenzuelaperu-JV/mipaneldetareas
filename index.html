@@ -1,1 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniTask Pro - Generador</title>
+    <!-- Fuente Google: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Iconos FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- Variables de Diseño --- */
+        :root {
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --bg-color: #f8fafc;
+            --sidebar-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+            --hover-bg: #f1f5f9;
+            --active-bg: #eff6ff;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
 
+        /* --- Reseteo y Estilos Base --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar (Barra Lateral) --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px;
+            height: 100%;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 12px;
+            margin-bottom: 32px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .logo-icon {
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .logo-text span {
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background-color: var(--hover-bg);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background-color: var(--active-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .sidebar-footer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 12px;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        .sidebar-footer img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .sidebar-footer-info p {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .sidebar-footer-info span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* --- Área Principal --- */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* --- Topbar (Barra Superior) --- */
+        .topbar {
+            height: 72px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .search-container {
+            position: relative;
+            width: 400px;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-container input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            border: 2px solid var(--card-bg);
+        }
+
+        .user-profile-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .user-profile-top img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+        }
+
+        /* --- Contenido Principal --- */
+        .content-area {
+            padding: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        /* --- Tarjetas --- */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+        }
+
+        /* Formulario de Configuración */
+        .config-form {
+            margin-bottom: 32px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .form-control {
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s;
+            background-color: var(--card-bg);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+        }
+
+        .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Sección de Generadores (Grid de Tarjetas) */
+        .generators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .generator-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 32px 24px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .generator-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+
+        .generator-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        /* Colores específicos para los iconos */
+        .icon-pdf { background-color: #fef2f2; color: #ef4444; }
+        .icon-flashcards { background-color: #f0fdf4; color: #22c55e; }
+        .icon-ppt { background-color: #fff7ed; color: #f97316; }
+
+        .generator-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .generator-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            line-height: 1.5;
+            flex-grow: 1; /* Empuja el botón hacia abajo */
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--active-bg);
+            color: var(--primary-hover);
+        }
+
+        /* Responsividad */
+        @media (max-width: 992px) {
+            .sidebar { width: 80px; padding: 24px 8px; }
+            .logo-text, .nav-item span, .sidebar-footer-info { display: none; }
+            .nav-item { justify-content: center; padding: 12px; }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .search-container { width: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo-container">
+            <i class="fa-solid fa-shield-halved logo-icon"></i>
+            <div class="logo-text">UniTask <span>Pro</span></div>
+        </div>
+
+        <ul class="nav-menu">
+            <a href="#" class="nav-item"><i class="fa-solid fa-house"></i> <span>Dashboard</span></a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-magnifying-glass"></i> <span>Mis Tareas</span></a>
+            <a href="#" class="nav-item"><i class="fa-regular fa-clock"></i> <span>Recordatorios</span></a>
+            <!-- Elemento Activo -->
+            <a href="#" class="nav-item active"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>Generador</span></a>
+            <a href="#" class="nav-item"><i class="fa-regular fa-clone"></i> <span>Flashcards</span></a>
+            <a href="#" class="nav-item"><i class="fa-regular fa-user"></i> <span>Mi Perfil</span></a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-gear"></i> <span>Configuración</span></a>
+        </ul>
+
+        <div class="sidebar-footer">
+            <img src="https://ui-avatars.com/api/?name=Juan+Perez&background=0D8ABC&color=fff" alt="Perfil">
+            <div class="sidebar-footer-info">
+                <p>Universidad Nacional</p>
+                <span>Estudiante</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrapper">
+        
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Buscar en UniTask...">
+            </div>
+            <div class="topbar-actions">
+                <button class="notification-btn">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-badge"></span>
+                </button>
+                <div class="user-profile-top">
+                    <img src="https://ui-avatars.com/api/?name=Juan+Perez&background=0D8ABC&color=fff" alt="User">
+                    <i class="fa-solid fa-chevron-down" style="font-size: 12px; color: var(--text-muted);"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENT AREA -->
+        <main class="content-area">
+            
+            <div class="page-header">
+                <h1>Generador de Estudio</h1>
+                <p>Transforma tus apuntes en material listo para estudiar o exponer.</p>
+            </div>
+
+            <!-- 1. Configuración -->
+            <div class="card config-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Materia / Curso</label>
+                        <select class="form-control">
+                            <option>Ingeniería en Sistemas Computacionales</option>
+                            <option>Matemáticas Discretas</option>
+                            <option>Bases de Datos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Temas a incluir</label>
+                        <input type="text" class="form-control" value="Estructuras de Datos, Complejidad Algorítmica">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Tu Nombre (para la portada)</label>
+                        <input type="text" class="form-control" value="Juan Pérez Martínez">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Opciones de Salida (Las 3 Tarjetas) -->
+            <div class="generators-grid">
+                
+                <!-- Tarjeta PDF -->
+                <div class="card generator-card">
+                    <div class="generator-icon icon-pdf">
+                        <i class="fa-regular fa-file-pdf"></i>
+                    </div>
+                    <h3>Documento PDF</h3>
+                    <p>Resumen estructurado con teoría, fórmulas y ejemplos para leer y estudiar.</p>
+                    <button class="btn-primary">
+                        <i class="fa-solid fa-download"></i> Descargar PDF
+                    </button>
+                </div>
+
+                <!-- Tarjeta Flashcards -->
+                <div class="card generator-card">
+                    <div class="generator-icon icon-flashcards">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <h3>Flashcards</h3>
+                    <p>Preguntas y respuestas rápidas diseñadas para memorización y repaso.</p>
+                    <button class="btn-primary">
+                        <i class="fa-solid fa-plus"></i> Crear Mazo
+                    </button>
+                </div>
+
+                <!-- Tarjeta PPT -->
+                <div class="card generator-card">
+                    <div class="generator-icon icon-ppt">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                    </div>
+                    <h3>Presentación PPT</h3>
+                    <p>Estructura académica completa: portada, objetivos, conceptos y resumen.</p>
+                    <button class="btn-primary">
+                        <i class="fa-solid fa-file-powerpoint"></i> Generar PPT
+                    </button>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
